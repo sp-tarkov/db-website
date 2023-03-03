@@ -100,7 +100,3 @@ steps:
       branch:
         - master
         - main
-      event:
-        - promote
-      target:
-        - db
