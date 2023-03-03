@@ -1,0 +1,13 @@
+{
+    "baseUrl": "http://localhost:3000",
+    "video": false,
+    "integrationFolder": "src/cypress/integration",
+    "fixtureFolder": "src/cypress/fixtures",
+    "supportFile": "src/cypress/support/index.js",
+    "pluginsFile": "src/cypress/plugin/index.js",
+    "env": {
+        "REACT_APP_SPTARKOV_HOME": "https://www.sp-tarkov.com/",
+        "REACT_APP_SPTARKOV_WORKSHOP": "https://mods.sp-tarkov.com/",
+        "REACT_APP_SPTARKOV_DOCUMENTATION": "https://docs.sp-tarkov.com/"
+    }
+}

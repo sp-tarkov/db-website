@@ -1,0 +1,49 @@
+---
+- name: install and configure PHP8 and composer
+  hosts: sptarkov
+
+  tasks:
+  - name: Delete spt-items-api before adding everything again
+    file:
+      state: absent
+      path: "{{ lookup('env', 'SPT_ITEMS_PATH') }}"
+  - name: Copy the project
+    copy:
+      src: ../items/api/
+      dest: "{{ lookup('env', 'SPT_ITEMS_PATH') }}"
+  - name: Copy PHP .env file
+    template:
+      src: ./templates/.php-env.j2
+      dest: "{{ lookup('env', 'SPT_ITEMS_PATH') }}/.env"
+  - name: Get JS chunks name
+    shell:
+      cmd: find "{{ lookup('env', 'SPT_ITEMS_PATH') }}" -type f -name "*chunk.js" -printf "%f\n"
+    register: find_output
+  - name: Get file names from find output
+    set_fact:
+      chunk_list: "{{ find_output['stdout'].split('\n') }}"
+  - name: Copy app.blade.php file
+    template:
+      src: ./templates/app.blade.php.j2
+      dest: "{{ lookup('env', 'SPT_ITEMS_PATH') }}/resources/views/app.blade.php"
+
+  - name: Download and installs all composer libs and dependencies
+    community.general.composer:
+      command: install
+      working_dir: "{{ lookup('env', 'SPT_ITEMS_PATH') }}"
+
+  # Ensure the permissions
+  - name: Reset files permissions
+    file:
+      path: "{{ lookup('env', 'SPT_ITEMS_PATH') }}"
+      owner: "{{ lookup('env', 'DEPLOY_USER') }}"
+      group: "{{ lookup('env', 'DEPLOY_USER_GROUP') }}"
+      mode: 0775
+      recurse: yes
+
+  - name: Initialize database
+    uri:
+      url: "https://{{ lookup('env', 'SPT_ITEMS_HOSTNAME') }}/api/refresh"
+      method: GET
+      status_code: [200, 204]
+      timeout: 60

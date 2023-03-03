@@ -1,0 +1,41 @@
+.dev/
+pastebin/cfg
+
+### items ###
+# dependencies
+**/node_modules
+**/.pnp
+.pnp.js
+**/vendor
+
+# testing
+**/coverage
+**/coverage/
+.phpunit.result.cache
+**/cypress/videos
+**/cypress/screnshots
+.nyc_output
+
+# production
+**/build
+
+# misc
+.DS_Store
+.env
+.env.local
+.env.*.local
+Homestead.json
+Homestead.yaml
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+## IDE cache
+**/.vscode/
+**/.idea/
+**/*.code-workspace
+
+# Okteto
+**/okteto.yml
+**/.stignore

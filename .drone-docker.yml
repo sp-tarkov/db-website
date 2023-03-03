@@ -1,0 +1,106 @@
+kind: pipeline
+type: docker
+name: db deployment
+
+trigger:
+  event:
+    - push
+
+steps:
+  - name: replace hosts and user variables
+    image: ubuntu:impish
+    environment:
+      SPT_ITEMS_HOSTNAME:
+        from_secret: spt_items_hostname
+      DEPLOY_HOSTNAME:
+        from_secret: deploy_hostname
+      DEPLOY_USER:
+        from_secret: deploy_username
+      DEPLOY_PRIVATE_KEY:
+        from_secret: deploy_ssh_key
+      DEPLOY_SSH_KEY_PASSPHRASE:
+        from_secret: deploy_ssh_key_passphrase
+    commands:
+      - sed -i 's/{{ SPT_ITEMS_HOSTNAME }}/'"$SPT_ITEMS_HOSTNAME"'/g' ./frontend/.env.example
+      - mv ./frontend/.env.example ./frontend/.env
+      - echo "$DEPLOY_PRIVATE_KEY" > private.key && chmod 600 private.key
+      - sed -i 's/{{ DEPLOY_HOSTNAME }}/'"$DEPLOY_HOSTNAME"'/g' ./.ansible/inventory
+      - sed -i 's/{{ DEPLOY_SSH_KEY_PASSPHRASE }}/'"$DEPLOY_SSH_KEY_PASSPHRASE"'/g' ./.ansible/inventory
+      - sed -i 's/{{ DEPLOY_USER }}/'"$DEPLOY_USER"'/g' ./.ansible/inventory
+
+  - name: install dependencies and build frontend
+    image: node:lts-alpine3.14
+    commands:
+      - node -v
+      - npm -v
+      - yarn --version
+      - yarn --cwd ./frontend install
+      - yarn --cwd ./frontend build --pure-lockfile
+      - rm -rf ./api/public/static/*
+      - cp -r ./frontend/build/* ./api/public
+      - rm ./api/public/index.html
+    depends_on:
+      - replace hosts and user variables
+
+  - name: frontend
+    image: nginx:1.21.4-alpine
+    commands:
+      - cp -r ./frontend/build/* /usr/share/nginx/html
+      - cp ./frontend/src/cypress/nginx_config/default.conf /etc/nginx/conf.d/default.conf
+      - nginx -g "daemon off;"
+    detach: true
+    depends_on:
+      - install dependencies and build frontend
+
+  - name: test frontend
+    image: cypress/browsers:node16.5.0-chrome94-ff93
+    commands:
+      - node -v
+      - npm -v
+      - yarn --version
+      - yarn --cwd ./frontend cy:ci
+    depends_on:
+      - install dependencies and build frontend
+
+  - name: check db ansible syntax
+    image: plugins/ansible:3
+    settings:
+      playbook: ./.ansible/playbook.yml
+      inventory: ./.ansible/inventory
+      galaxy: ./.ansible/requirements.yml
+      syntax_check: true
+    depends_on:
+      - clone
+    when:
+      branch:
+        - development
+
+  - name: apply ansible playbook for items database
+    image: plugins/ansible:3
+    settings:
+      playbook: ./.ansible/playbook.yml
+      inventory: ./.ansible/inventory
+      galaxy: ./.ansible/requirements.yml
+      timeout: 60
+      verbose: 2
+    environment:
+      SPT_ITEMS_HOSTNAME:
+        from_secret: spt_items_hostname
+      DEPLOY_HOSTNAME:
+        from_secret: deploy_hostname
+      DEPLOY_USER:
+        from_secret: deploy_username
+      DEPLOY_USER_GROUP:
+        from_secret: deploy_user_group
+      SPT_ITEMS_PATH:
+        from_secret: db_deploy_path
+    depends_on:
+      - test frontend
+    when:
+      branch:
+        - master
+        - main
+      event:
+        - promote
+      target:
+        - db
