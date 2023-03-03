@@ -194,7 +194,6 @@ export const SearchArea = () => {
                         || elt.id?.toLocaleLowerCase().includes(state.inputValue.toLocaleLowerCase())
                         || elt.shortName?.toLocaleLowerCase().includes(state.inputValue.toLocaleLowerCase()))
                 })}
-                filterSelectedOptions
             />
             <Box className={classes.jsonHolder}>{formatDisplayItems()}</Box>
         </Box>

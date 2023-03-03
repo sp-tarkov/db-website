@@ -27,9 +27,7 @@
 
 
 ## The pipeline summary
-* You can use either of the two drone pipeline types:
-    * [docker](.drone-docker.yml)
-    * [kubernetes](.drone-kubernetes.yml)
+* The Drone pipeline is based on Docker: [.drone-docker.yml](.drone-docker.yml)
 * Some enhancement ideas can be found [here](#some-enhancement-ideas)
 
 1. Each push will:
