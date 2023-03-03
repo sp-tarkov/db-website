@@ -1,10 +1,5 @@
 # SPT Items
 
-* You can use either of the two drone pipeline types:
-    * [docker](.drone-docker.yml)
-    * [kubernetes](.drone-kubernetes.yml)
-* Some enhancement ideas can be found [here](#some-enhancement-ideas)
-
 ## Required secrets
 | secret name             | description | example       |
 | :-----------------      | :---------- | :-------    |
@@ -30,7 +25,13 @@
     1. Nginx must be configured to use HTTPS
     1. Nginx must be configured to listen to *spt_items_hostname* and to point to the *deploy_path*
 
+
 ## The pipeline summary
+* You can use either of the two drone pipeline types:
+    * [docker](.drone-docker.yml)
+    * [kubernetes](.drone-kubernetes.yml)
+* Some enhancement ideas can be found [here](#some-enhancement-ideas)
+
 1. Each push will:
     1. Test the frontend
     2. IF on `development` or `master`/`main` branch
@@ -45,3 +46,6 @@ see [Walkthrough.md](./docs/Walkthrough.md)
 ## Some enhancement ideas
 - Store the build so that it is not rebuilt on any `promote` event
 - Use a volume or a cache for Yarn install
+
+## Thanks
+- CWX
