@@ -9,7 +9,7 @@
       path: "{{ lookup('env', 'SPT_ITEMS_PATH') }}"
   - name: Copy the project
     copy:
-      src: ../items/api/
+      src: ../api/
       dest: "{{ lookup('env', 'SPT_ITEMS_PATH') }}"
   - name: Copy PHP .env file
     template:
