@@ -104,7 +104,7 @@ class ItemsCollection
     public function refreshAllCache(): void
     {
         $this->refreshItemsCache();
-        //$this->refreshLocalesCache();
+        $this->refreshLocalesCache();
     }
 
     /**
