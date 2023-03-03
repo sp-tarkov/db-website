@@ -33,32 +33,53 @@ class ItemsCollection
         }
     }
 
+    /**
+     * Refeshes the locales for the items and clothing
+     *
+     * @return void
+     */
     public function refreshLocalesCache(): void
     {
         $this->locales = collect();
         $rawLocalesGlobalBaseUrl = GiteaConfig::RAW_LOCALES_GLOBAL_BASE_URL;
 
-        // Getting all locales in project/assets/database/locales/global from the Server development branch repository
-
         $localesList = collect(Http::withOptions(['verify' => false])->get(GiteaConfig::LOCALES_GLOBAL_URL)->json());
-        foreach ($localesList as $item) {
-            // Extract the json name for the locale
-            preg_match('/([a-z]{2}(-[a-z]{2})?).json/', $item['name'], $currentLocaleName, PREG_OFFSET_CAPTURE);
 
-            // If the name is not supported for any reason, dont add it to the locales
+        foreach ($localesList as $locale)
+        {
+            // Extract the json name for the locale
+            preg_match('/([a-z]{2}(-[a-z]{2})?).json/', $locale['name'], $currentLocaleName, PREG_OFFSET_CAPTURE);
+
             if (empty($currentLocaleName) || !$currentLocaleName[1][0]) continue;
 
             $trimmedCurrentLocaleName = trim($currentLocaleName[1][0]);
-            $currentLocaleJson = Http::withOptions(['verify' => false])
-                ->get("${rawLocalesGlobalBaseUrl}/${trimmedCurrentLocaleName}.json")->json();
-            $templateLocale = collect($currentLocaleJson['templates']);
-            $customizationLocale = collect($currentLocaleJson['customization']);
-            $this->locales = $this->locales->merge([$trimmedCurrentLocaleName => $templateLocale->concat($customizationLocale)]);
-        }
+
+            $currentLocaleJson = Http::withOptions(['verify' => false])->get($rawLocalesGlobalBaseUrl . $trimmedCurrentLocaleName . ".json")->json();
+            
+            $templates = [];
+
+            foreach ($this->items as $item) {
+
+                if ($item['_type'] === 'Node' || !property_exists((object) $currentLocaleJson, $item['_id'].' Name')) continue;
+
+                $array = [
+                    "Name" => $currentLocaleJson[$item['_id'].' Name'],
+                    "ShortName" => $currentLocaleJson[$item['_id'].' ShortName'],
+                    "Description" => $currentLocaleJson[$item['_id'].' Description']
+                ];
+                //var_dump($item);die;
+
+                $templates[$item['_id']] = $array;
+            }
+            $this->locales = $this->locales->merge(collect([$trimmedCurrentLocaleName => $templates]));
+
+        }        
         Cache::put($this->locales_cache_key, $this->locales);
     }
 
     /**
+     * Refreshes the items of the DB
+     * 
      * @return void
      */
     public function refreshItemsCache(): void
@@ -83,7 +104,7 @@ class ItemsCollection
     public function refreshAllCache(): void
     {
         $this->refreshItemsCache();
-        $this->refreshLocalesCache();
+        //$this->refreshLocalesCache();
     }
 
     /**
