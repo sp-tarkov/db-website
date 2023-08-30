@@ -90,7 +90,17 @@ export const SearchArea = () => {
         // eslint-disable-next-line
     }, []) // Need to only be created on startup
 
-    useEffect(() => initHierarchy(), [initHierarchy])
+    useEffect(() => {
+        initHierarchy()
+
+        // This should only run once on component load
+        if (!searchInputState && params.id) {
+            const newId = params.id.trim();
+            setSearchInput(newId);
+            (async () => await handleInput(newId))();
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [initHierarchy]) // Only need this to run once
 
     useEffect(()=>{
         if (selectedItem){
@@ -119,15 +129,6 @@ export const SearchArea = () => {
         setIsBusy(false)
     }, [handleIDInput, handleNameInput, isbusy, setSelectedItem])
 
-    useEffect(() => {
-        if (!searchInputState && params.id) {
-            const newId = params.id.trim();
-            console.log(newId);
-            setSearchInput(newId);
-            (async () => await handleInput(newId))();
-        }
-    }, [params, searchInputState, setSearchInput, handleInput, navigate])
-
     const formatDisplayItems = () => {
         // If loading
         if (isbusy) return <CircularProgress size={100}/>
@@ -149,7 +150,7 @@ export const SearchArea = () => {
         } else return <Typography id='search-no-data'>No data to display</Typography>
     }
 
-    const findOptionValue = (option: ItemOption, value: ItemOption): boolean => {
+    const findOptionValue = (option: IItemOption, value: IItemOption): boolean => {
         return option.name?.toLocaleLowerCase() === value.name?.toLocaleLowerCase()
             || option.id?.toLocaleLowerCase() === value.id?.toLocaleLowerCase()
             || option.shortName?.toLocaleLowerCase() === value.shortName?.toLocaleLowerCase()
@@ -160,7 +161,7 @@ export const SearchArea = () => {
             <Autocomplete
                 id='search-autocomplete'
                 options={selectOptions.map((elt) => ({name: elt.name, shortName: elt.shortName, id: elt.id}))}
-                getOptionLabel={(option) => option.name ? option.name : option.id}
+                getOptionLabel={(option) => (option.name ? option.name : option.id) ?? ''}
                 isOptionEqualToValue={(option, value) => findOptionValue(option, value)}
                 open={!isbusy && searchInputState.length >= searchThreshold && (searchInputState !== selectedItem?.locale.Name && searchInputState !== selectedItem?.item._name)}
                 className={classes.autocomplete}
