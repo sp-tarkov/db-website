@@ -179,7 +179,7 @@ export const SearchArea = () => {
                 onChange={async (event: SyntheticEvent, newValue: IItemOption | null) => {
                     if (newValue) {
                         const selectedOption = selectOptions.find(
-                            (elt) => elt.name === newValue.name,
+                            (elt) => elt.id === newValue.id,
                         )
                         if (selectedOption) await handleIDInput(selectedOption.id)
                     }
