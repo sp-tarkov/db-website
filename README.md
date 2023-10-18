@@ -47,3 +47,9 @@ see [Walkthrough.md](./docs/Walkthrough.md)
 
 ## Thanks
 - CWX
+
+## Cache refresh workaround
+1. Navigate to `/var/www/html/aki/db-website/items/storage/framework/cache/data`
+2. Delete each cache folder
+3. Use the site to search for an item
+4. New cache should be generated for the DB
