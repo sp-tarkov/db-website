@@ -1,29 +1,22 @@
-import { DarkModeToggle } from './DarkModeToggle'
-import { LocaleSelect } from './LocaleSelect'
-import { JsonTheme } from './JsonTheme'
-import { Theme } from '@mui/material'
-import { makeStyles } from '@mui/styles';
+import { styled } from "@mui/material/styles";
+import { ThemeToggle } from "@src/components/HeaderForm/ThemeToggle";
+import { LocaleSelect } from "@src/components/HeaderForm/LocaleSelect";
+import { JsonTheme } from "@src/components/HeaderForm/JsonTheme";
 
-const useStyles = makeStyles((theme: Theme) => ({
-  form: {
-    display: 'flex',
-    flexDirection: 'row',
-    flexGrow: 1,
-    justifyContent: 'flex-end',
-    height: '100%'
-  },
+const CustomForm = styled("form")(() => ({
+  display: "flex",
+  flexDirection: "row",
+  flexGrow: 1,
+  justifyContent: "flex-end",
+  height: "100%"
 }));
 
-export const HeaderForm = () => {
-  const classes = useStyles();
-
+export const HeaderForm: React.FC = () => {
   return (
-    <>
-      <form className={classes.form}>
-          <DarkModeToggle />
-          <LocaleSelect />
-          <JsonTheme />
-      </form>
-    </>
-  )
-}
+    <CustomForm>
+      <ThemeToggle />
+      <LocaleSelect />
+      <JsonTheme />
+    </CustomForm>
+  );
+};

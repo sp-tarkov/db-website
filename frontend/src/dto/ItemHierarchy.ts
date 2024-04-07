@@ -1,5 +1,3 @@
-import { ItemWithLocale } from './ItemWithLocale';
+import { ItemComplete } from "@src/dto/ItemComplete";
 
-export interface ItemHierarchy {
-    [id: string]: ItemWithLocale
-}
+export type ItemHierarchy = Record<string, ItemComplete>;

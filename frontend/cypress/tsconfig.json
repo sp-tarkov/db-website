@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "lib": ["ESNext", "DOM"],
+    "types": ["cypress", "node"],
+    "moduleResolution": "Bundler",
+    "baseUrl": "./",
+    "paths": {
+      "@support/*": ["support/*"],
+      "@fixtures/*": ["fixtures/*"],
+      "@src/*": ["../src/*"]
+    },
+    "resolveJsonModule": true,
+    "esModuleInterop": true
+  },
+  "include": ["**/*.ts"]
+}

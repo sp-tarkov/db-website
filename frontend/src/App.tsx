@@ -1,38 +1,53 @@
-import {ThemeProvider} from '@mui/material/styles'
-import {MainPage} from './pages/MainPage'
-import {ThemeMode} from './state/ThemeMode'
-import {CssBaseline, useMediaQuery} from '@mui/material'
-import {useEffect} from "react";
-import {darkPalette} from "./theme/darkTheme";
-import {lightPalette} from "./theme/lightTheme";
-import {getTheme} from "./theme/Theme";
-import {LocalStorageKeys} from "./dataaccess/SaveKeys";
-import { useGlobalState } from './state/GlobalState'
+import { useEffect } from "react";
+import { BrowserRouter } from "react-router-dom";
+import { Box, CssBaseline, useMediaQuery } from "@mui/material";
+import { styled, ThemeProvider } from "@mui/material/styles";
+import { useThemeStore } from "@src/store/theme";
+import { getTheme } from "@src/theme/Theme";
+import { darkPalette } from "@src/theme/darkTheme";
+import { lightPalette } from "@src/theme/lightTheme";
+import { Router } from "@src/router/router";
+import { Header } from "@src/components/Header";
+import { Footer } from "@src/components/Footer";
 
-const App = () => {
-    const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
-    const [preferedColorScheme ,setPreferedColorScheme] = useGlobalState(state => [state.preferedColorScheme, state.setPreferedColorScheme])
+const AppContainer = styled(Box)(({ theme }) => ({
+  background: theme.palette.background.default,
+  display: "flex",
+  flexDirection: "column",
+  flexGrow: 1,
+  height: "100vh",
+  maxheight: "100vh"
+}));
 
-    useEffect(() => {
-        const localPreferedTheme = localStorage.getItem(LocalStorageKeys.PREFERED_COLOR_SCHEME);
-        if (localPreferedTheme) {
-            setPreferedColorScheme(localPreferedTheme as ThemeMode)
-            return
-        }
+export const App: React.FC = () => {
+  const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
+  const [checkedPreferredColorScheme, setCheckedPreferredColorScheme] = useThemeStore((store) => [store.checkedPreferredColorScheme, store.setCheckedPreferredColorScheme]);
+  const [themeMode, setThemeMode] = useThemeStore((store) => [store.themeMode, store.setThemeMode]);
 
-        const preferedTheme = prefersDarkMode ? ThemeMode.DARK_MODE : ThemeMode.LIGHT_MODE;
-        setPreferedColorScheme(preferedTheme)
-        // eslint-disable-next-line
-    }, [prefersDarkMode]) // Need to be only used on prefersDarkMode change
+  useEffect(() => {
+    if(checkedPreferredColorScheme) {
+      return;
+    }
 
-    return (
-        <>
-            <ThemeProvider theme={getTheme(preferedColorScheme === ThemeMode.DARK_MODE ? darkPalette : lightPalette)}>
-                <CssBaseline/>
-                <MainPage/>
-            </ThemeProvider>
-        </>
-    )
-}
+    const preferredTheme: "dark" | "light" = prefersDarkMode ? "dark" : "light";
+    if(preferredTheme !== themeMode) {
+      setThemeMode(preferredTheme);
+    }
 
-export default App
+    setCheckedPreferredColorScheme();
+    // eslint-disable-next-line
+  }, []); // Need to be only used on prefersDarkMode change
+
+  return (
+    <ThemeProvider theme={getTheme(themeMode === "dark" ? darkPalette : lightPalette)}>
+      <CssBaseline />
+      <AppContainer>
+        <Header />
+        <BrowserRouter>
+          <Router />
+        </BrowserRouter>
+        <Footer />
+      </AppContainer>
+    </ThemeProvider>
+  );
+};

@@ -1,86 +1,74 @@
-import { Box, Link, Theme } from '@mui/material'
-import { makeStyles } from '@mui/styles'
-import { useCallback } from 'react';
-import { useGlobalState } from '../state/GlobalState';
-import { HeaderForm } from './HeaderForm';
+import { Box, Link } from "@mui/material";
+import { styled } from "@mui/material/styles";
+import { HeaderForm } from "@src/components/HeaderForm";
 
-const useStyles = makeStyles((theme: Theme) => ({
-  headerContainer: {
-    display: 'flex',
-    flex: '0 1 3vh',
-    flexDirection: 'row',
-    backgroundColor: theme.palette.background.paper,
-    alignItems: 'center',
-    padding: '0 10vw 0 10vw',
-  },
-  linksContainer: {
-    display: 'flex',
-    flexGrow: 2,
-    flexDirection: 'row',
-    alignItems: 'center',
-    height: '100%',
-  },
-  formContainer: {
-    display: 'flex',
-    flexGrow: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    height: '100%',
-  },
-  link: {
-    display: 'flex',
-    padding: '0 1vw 0 1vw',
-    height: '100%',
-    alignItems: 'center',
-    borderBottom: `1px solid transparent`,
-    '&:hover': {
-      borderBottom: `1px solid ${theme.palette.action.hover}`,
-    },
-  },
-}))
+const HeaderContainer = styled(Box)(({ theme }) => ({
+  display: "flex",
+  flex: "0 1 3vh",
+  flexDirection: "row",
+  backgroundColor: theme.palette.background.paper,
+  alignItems: "center",
+  padding: "0 10vw 0 10vw"
+}));
 
-export const Header = () => {
-  const classes = useStyles()
-  const websiteLink = useGlobalState(useCallback((state) => state.sptarkovWebsiteUrl,[]))
-  const workshopLink = useGlobalState(useCallback((state) => state.sptarkovWorkshopUrl,[]))
-  const documentationLink = useGlobalState(useCallback((state) => state.sptarkovDocumentationUrl,[]))
+const LinksContainer = styled(Box)(() => ({
+  display: "flex",
+  flexGrow: 2,
+  flexDirection: "row",
+  alignItems: "center",
+  height: "100%"
+}));
 
+const FormContainer = styled(Box)(() => ({
+  display: "flex",
+  flexGrow: 1,
+  flexDirection: "row",
+  alignItems: "center",
+  height: "100%"
+}));
+
+const CustomLink = styled(Link)(({ theme }) => ({
+  display: "flex",
+  padding: "0 1vw 0 1vw",
+  height: "100%",
+  alignItems: "center",
+  borderBottom: `1px solid transparent`,
+  "&:hover": {
+    borderBottom: `1px solid ${theme.palette.action.hover}`
+  }
+}));
+
+const links = [
+  {
+    id: "website-link",
+    path: import.meta.env.VITE_SPTARKOV_HOME ?? "",
+    label: "Website"
+  },
+  {
+    id: "workshop-link",
+    path: import.meta.env.VITE_SPTARKOV_WORKSHOP ?? "",
+    label: "Workshop"
+  },
+  {
+    id: "documentation-link",
+    path: import.meta.env.VITE_SPTARKOV_DOCUMENTATION ?? "",
+    label: "Documentation"
+  }
+];
+
+export const Header: React.FC = () => {
   return (
-    <>
-      <Box className={classes.headerContainer}>
-        <Box className={classes.linksContainer}>
-          <Link
-            underline="hover"
-            color="inherit"
-            id="website-link"
-            href={websiteLink}
-            className={classes.link}
-          >
-            Website
-          </Link>
-          <Link
-            underline="hover"
-            color="inherit"
-            id="workshop-link"
-            href={workshopLink}
-            className={classes.link}
-          >
-            Workshop
-          </Link>
-          <Link
-            underline="hover"
-            color="inherit"
-            id="documentation-link"
-            href={documentationLink}
-            className={classes.link}
-          >
-            Documentation
-          </Link>
-        </Box>
-        <Box className={classes.formContainer}>
-          <HeaderForm/>
-        </Box>
-      </Box>
-    </>
-  )
-}
+    <HeaderContainer>
+      <LinksContainer>
+        {links.map((link) => (
+          <CustomLink key={link.path} href={link.path} id={link.id} underline="hover" color="inherit">
+            {link.label}
+          </CustomLink>
+        ))}
+      </LinksContainer>
+      <FormContainer>
+        <HeaderForm />
+      </FormContainer>
+    </HeaderContainer>
+  );
+};

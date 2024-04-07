@@ -1,0 +1,8 @@
+{
+  "$schema": "https://json.schemastore.org/nycrc.json",
+  "excludeAfterRemap": true,
+  "include": [
+      "src/**/*.ts",
+      "src/**/*.tsx"
+  ]
+}

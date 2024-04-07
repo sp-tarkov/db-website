@@ -1,22 +1,18 @@
-import {Box} from '@mui/material'
-import {makeStyles} from '@mui/styles'
+import { Box } from "@mui/material";
+import { styled } from "@mui/material/styles";
 
-const useStyles = makeStyles(() => ({
-    footerHolder: {
-        display: 'flex',
-        flex: '0 1 3vh',
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: '0 10vw 0 10vw'
-    }
-}))
+const FooterContainer = styled(Box)(() => ({
+  display: "flex",
+  flex: "0 1 3vh",
+  flexDirection: "row",
+  alignItems: "center",
+  justifyContent: "center",
+  padding: "0 10vw 0 10vw"
+}));
 
-export const Footer = () => {
-    const classes = useStyles()
-
-    return (
-        <Box className={classes.footerHolder}>
-        </Box>
-    )
-}
+export const Footer: React.FC = () => {
+  return (
+    <FooterContainer>
+    </FooterContainer>
+  );
+};

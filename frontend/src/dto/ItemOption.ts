@@ -1,5 +1,5 @@
 export interface ItemOption {
-    id: string
-    name: string
-    shortName?: string
+  id: string;
+  name: string;
+  shortName?: string;
 }
