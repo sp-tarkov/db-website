@@ -1,0 +1,25 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "module": "src/index.js",
+  "scripts": {
+    "start": "bun run src/index.ts",
+    "dev": "bun run --watch src/index.ts"
+  },
+  "dependencies": {
+    "@elysiajs/cors": "^1.0.2",
+    "@elysiajs/static": "^1.0.2",
+    "@elysiajs/swagger": "^1.0.3",
+    "axios": "^1.6.8",
+    "elysia": "^1.0.13",
+    "logestic": "^1.1.1"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "author": "SPT",
+  "license": "MIT"
+}
