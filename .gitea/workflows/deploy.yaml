@@ -12,6 +12,9 @@ jobs:
       uses: actions/checkout@v3
       with:
         path: /workspace/SPT-AKI/DB-Website
+
     - name: List Files
-      run: ls -lah /workspace/SPT-AKI/DB-Website
+      run: ls -lah
       shell: bash
+      with:
+        path: /workspace/SPT-AKI/DB-Website
