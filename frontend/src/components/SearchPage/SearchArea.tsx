@@ -46,15 +46,11 @@ export const SearchArea: React.FC = () => {
   const handleNameInput = useCallback(async (input: string) => {
     const searchResults = await searchItem(input, preferedLocale);
 
-    console.log(searchResults);
-
     const options = searchResults.map((res): ItemOption => ({
       id: res.item._id,
       name: res.locale.Name ?? res.item._name,
       shortName: JSON.stringify(res.locale.ShortName)
     }));
-
-    console.log(options);
 
     setSelectOptions(options);
   }, [preferedLocale]);
