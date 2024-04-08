@@ -1,7 +1,7 @@
 # SPT DB Items Search
 
 Source for the SPT DB Item Lookup website hosted at:
-https://db.sp-tarkov.com/
+https://db.sp-tarkov.com
 
 ## Required Secrets
 
