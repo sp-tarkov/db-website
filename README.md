@@ -7,9 +7,9 @@ https://db.sp-tarkov.com/
 
 | Secret Name     | Description |
 | :-------------- | :---------- |
-| SSH_DEPLOY_HOST | The remote server host where deployments are pushed |
-| SSH_PRIVATE_KEY | The private key that the SSH connection uses to connect to the remote server |
-| SSH_KNOWN_HOSTS | The known_hosts entry for the remote server |
+| SSH_DEPLOY_HOST | The remote server host where deployments are pushed. |
+| SSH_PRIVATE_KEY | The private key that the SSH connection uses to connect to the remote server. |
+| SSH_KNOWN_HOSTS | The known_hosts entry for the remote server. |
 
 ## Local Build
 
