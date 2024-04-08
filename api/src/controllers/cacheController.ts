@@ -15,8 +15,6 @@ export class CacheController {
         const items = CacheService.getCache("items");
         const locales = CacheService.getCache("locales");
 
-        console.log(items, locales);
-
         const searchInput = query.toLowerCase().trim();
         const locale = locales[localeId];
 

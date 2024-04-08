@@ -18,10 +18,11 @@ new Elysia()
         }
     }))
     .use(cors({ allowedHeaders: "Origin, X-Requested-With, Content-Type, Accept" }))
-    .use(staticPlugin({ prefix: "/", alwaysStatic: true }))
+    .use(staticPlugin({ prefix: "/", indexHTML: true }))
     .use(Logestic.preset("fancy"))
     .use(api)
-    .get("*", () => Bun.file("public/index.html"))
+    .get("/search", () => Bun.file("public/index.html"))
+    .get("/search/*", () => Bun.file("public/index.html"))
     .listen(3000, (server) => {
         console.log(`Server is running at ${server.hostname}:${server.port}`);
     });
