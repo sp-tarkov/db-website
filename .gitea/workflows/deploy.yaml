@@ -2,7 +2,7 @@ name: Deploy
 
 on:
   push:
-    branches: [ main, rewrite ]
+    branches: [ main ]
 
 jobs:
   deploy:
@@ -13,8 +13,18 @@ jobs:
       with:
         path: /workspace/SPT-AKI/DB-Website
 
-    - name: List Files
+    - name: List files
       run: ls -lah
       shell: bash
       with:
         path: /workspace/SPT-AKI/DB-Website
+
+    - name: Set up SSH key
+      uses: webfactory/ssh-agent@v0.9.0
+      with:
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+    - name: Push to production
+      run: |
+        git remote add deploy ssh://dbwebsite@51.195.101.201/home/dbwebsite/DB-Website.git
+        git push deploy main:main
