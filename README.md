@@ -3,13 +3,10 @@
 Source for the SPT DB Item Lookup website hosted at:
 https://db.sp-tarkov.com
 
-## Required Secrets
+## Run Docker Image
 
-| Secret Name     | Description |
-| :-------------- | :---------- |
-| SSH_DEPLOY_HOST | The remote server host where deployments are pushed. |
-| SSH_PRIVATE_KEY | The private key that the SSH connection uses to connect to the remote server. |
-| SSH_KNOWN_HOSTS | The known_hosts entry for the remote server. |
+- `docker pull ghcr.io/sp-tarkov/db-website:main`
+- `docker run -p 3001:3001 db-website:main`
 
 ## Local Build
 
