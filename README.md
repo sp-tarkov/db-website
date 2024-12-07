@@ -6,7 +6,7 @@ https://db.sp-tarkov.com
 ## Run Docker Image
 
 - `docker pull ghcr.io/sp-tarkov/db-website:main`
-- `docker run -p 3001:3001 db-website:main`
+- `docker run -p 3001:3001 ghcr.io/sp-tarkov/db-website:main`
 
 ## Local Build
 
