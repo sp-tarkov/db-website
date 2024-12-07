@@ -23,6 +23,6 @@ new Elysia()
     .use(api)
     .get("/search", () => Bun.file("public/index.html"))
     .get("/search/*", () => Bun.file("public/index.html"))
-    .listen(3000, (server) => {
+    .listen(3001, (server) => {
         console.log(`Server is running at ${server.hostname}:${server.port}`);
     });
