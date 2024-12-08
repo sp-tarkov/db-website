@@ -1,3 +1,5 @@
+ARG PROD=false
+
 FROM node:20.12-slim
 
 # Update and install dependencies
@@ -15,7 +17,9 @@ WORKDIR /app
 COPY frontend ./frontend
 WORKDIR /app/frontend
 RUN npm install
-RUN npm run build:prod
+
+# Conditionally run production or development build
+RUN if [ "$PROD" = "true" ]; then npm run build:prod; else npm run build; fi
 
 # Move built frontend assets into backend public directory
 WORKDIR /app

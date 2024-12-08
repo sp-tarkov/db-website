@@ -3,11 +3,6 @@
 Source for the SPT DB Item Lookup website hosted at:
 https://db.sp-tarkov.com
 
-## Run Docker Image
-
-- `docker pull ghcr.io/sp-tarkov/db-website:main`
-- `docker run -p 3001:3001 ghcr.io/sp-tarkov/db-website:main`
-
 ## Local Build
 
 Requirements:
@@ -32,3 +27,9 @@ Build the back-end:
 
 Start the local server:
 - `bun run start`
+
+## Development with Docker
+
+- `docker build --build-arg PROD=false -t db-website:local .`
+- `docker run -p 3001:3001 db-website:local`
+- Visit http://localhost:3001
