@@ -39,3 +39,4 @@ yarn-error.log*
 # Okteto
 **/okteto.yml
 **/.stignore
+api/cache-repo
