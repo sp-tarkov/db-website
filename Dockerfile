@@ -1,6 +1,8 @@
-ARG PROD=false
-
 FROM node:20.12-slim
+
+# Set the PROD environment variable from the build argument
+ARG PROD
+ENV PROD=$PROD
 
 # Update and install dependencies
 RUN apt-get update && apt-get install -y curl unzip && rm -rf /var/lib/apt/lists/*
