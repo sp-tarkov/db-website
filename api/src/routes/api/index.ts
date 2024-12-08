@@ -21,7 +21,7 @@ export const api = new Elysia({ prefix: "/api" })
         })
     })
     .get("/cache/:key", async ({ params: { key } }) => {
-        return await CacheService.getCache(key);
+        return CacheService.getCache(key);
     }, {
         params: t.Object({
             key: t.Union([ t.Literal("items"), t.Literal("locales"), t.Literal("handbook") ]),
