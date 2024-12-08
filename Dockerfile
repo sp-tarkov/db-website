@@ -5,7 +5,7 @@ ARG PROD
 ENV PROD=$PROD
 
 # Update and install dependencies
-RUN apt-get update && apt-get install -y curl unzip && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y curl unzip git git-lfs && rm -rf /var/lib/apt/lists/*
 
 # Install Latest Bun
 RUN curl -fsSL https://bun.sh/install | bash
