@@ -12,7 +12,7 @@ new Elysia()
     .use(swagger({
         documentation: {
             info: {
-                title: "SPT-AKI DB API",
+                title: "SPT DB API",
                 version: "1.0.0",
             }
         }

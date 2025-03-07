@@ -10,7 +10,7 @@ export default defineConfig({
     }
   },
   env: {
-    VITE_SPTARKOV_HOME: "https://www.sp-tarkov.com/",
+    VITE_SPTARKOV_HOME: "https://sp-tarkov.com/",
     VITE_SPTARKOV_WORKSHOP: "https://mods.sp-tarkov.com/",
     VITE_SPTARKOV_DOCUMENTATION: "https://docs.sp-tarkov.com/"
   }
